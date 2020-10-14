@@ -40,6 +40,9 @@
                                 </div>
                                 <input type="password" id="password" name="password" class="form-control" placeholder="password">
                             </div>
+                            <div id="alert" class="alert alert-danger small" role="alert">
+
+                            </div>
                             <div class="row align-items-center remember">
                                 <input type="checkbox">Remember Me
                             </div>
@@ -57,21 +60,26 @@
             </div>
         </div>
         <script>
+            $(document).ready(function () {
+                $('.alert').hide();
+            });
             function login() {
+
                 var username = $('#username').val();
                 var password = $('#password').val();
 
                 if (username == "admin" && password == "admin") {
-                    alert("Login Success");
+
                     location.replace("home.html");
 
                 } else {
-                    alert("Username or Password Incorrect");
+                    $('#alert').show();
+                    $('#alert').html("Username or Password Incorrect");
                 }
 
             }
-            
-            
+
+
         </script>
     </body>
 </html>

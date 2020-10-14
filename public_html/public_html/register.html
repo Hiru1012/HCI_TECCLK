@@ -32,34 +32,54 @@
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                                 </div>
                                 <input type="text" id="name" onkeypress="validateName()" name="name" class="form-control" placeholder="Full Name">
-
+                            </div>
+                            <div id="alertName" class="alert alert-danger small" role="alert">
+                                *** Name Required !
                             </div>
                             <div class="input-group form-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
                                 <input type="text" id="contact" name="contact" onkeypress="onClickValidationContactNumber()" class="form-control" placeholder="Contact Number">
-
+                            </div>
+                            <div id="alertContact" class="alert alert-danger small" role="alert">
+                                *** Contact Required !
                             </div>
                             <div class="input-group form-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-at"></i></span>
                                 </div>
                                 <input type="text" id="email" name="email" class="form-control" placeholder="Email">
-
+                            </div>
+                            <div id="alertEmail" class="alert alert-danger small" role="alert">
+                                *** E-Mail Required !
                             </div>
                             <div class="input-group form-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-user-lock"></i></span>
                                 </div>
                                 <input type="text" id="username" name="username" class="form-control" placeholder="username">
-
+                            </div>
+                            <div id="alertUserName" class="alert alert-danger small" role="alert">
+                                *** User Name Required !
                             </div>
                             <div class="input-group form-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-key"></i></span>
                                 </div>
                                 <input type="password" id="password" name="password" class="form-control" placeholder="password">
+                            </div>
+                            <div id="alertPassword" class="alert alert-danger small" role="alert">
+                                *** Password Required !
+                            </div>
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                <input type="password" id="repassword" name="repassword" class="form-control" placeholder="confirm password">
+                            </div>
+                            <div id="alertRePassword" class="alert alert-danger small" role="alert">
+                                *** Confirm Password Required !
                             </div>
                             <div class="form-group">
                                 <input value="Sign Up" onclick="register()" class="btn float-right login_btn">
@@ -77,106 +97,122 @@
         <script src="js/jquery.3.2.1.min.js" type="text/javascript"></script>
         <script src="js/jquery.3.2.1.min.js" type="text/javascript"></script>
         <script>
-            function register() {
+                                    $(document).ready(function () {
+                                        $('.alert').hide();
+                                    });
+                                    function register() {
+                                        $('.alert').hide();
+                                        var name = $('#name').val();
+                                        var contact = $('#contact').val();
+                                        var email = $('#email').val();
+                                        var username = $('#username').val();
+                                        var password = $('#password').val();
+                                        var repassword = $('#repassword').val();
 
-                var name = $('#name').val();
-                var contact = $('#contact').val();
-                var email = $('#email').val();
-                var username = $('#username').val();
-                var password = $('#password').val();
+                                        if (name == "") {
+                                            $('#alertName').show();
+                                        } else if (contact == "") {
+                                            $('#alertContact').show();
+                                        } else if (email == "") {
+                                            $('#alertEmail').show();
+                                        } else if (username == "") {
+                                            $('#alertUserName').show();
+                                        } else if (password == "") {
+                                            $('#alertPassword').show();
+                                        } else if (repassword == "") {
+                                            $('#alertRePassword').show();
+                                        } else if (repassword != password || password == '') {
+                                            $('#alertRePassword').html("***Invalid Password");
+                                            $('#alertRePassword').show();
+                                        } else if (ValidateEmail() || contactValidation()) {
 
-                if (email == "" || name == "" || contact == "" || username == "" || password == "") {
+                                        } else {
+                                            window.location.href = "login.html";
+                                            form.reset();
+                                        }
 
-                    alert("Please fill form");
+                                    }
 
-                } else if (ValidateEmail() || contactValidation()) {
+                                    function ValidateEmail() {
 
-                } else {
-                    alert("Registration successfull");
-                    form.reset();
-                }
+                                        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#email').val()))
+                                        {
+                                            return false;
+                                        }
+                                        $('#alertEmail').html('***Invalid Email');
+                                        $('#alertEmail').show();
+                                        document.getElementById("email").select();
+                                        return true;
+                                    }
 
-            }
+                                    function onClickValidationContactNumber(evt) {
+                                        var theEvent = evt || window.event;
+                                        // Handle paste
+                                        if (theEvent.type === 'paste') {
+                                            key = event.clipboardData.getData('text/plain');
+                                        } else {
+                                            // Handle key press
+                                            var key = theEvent.keyCode || theEvent.which;
+                                            key = String.fromCharCode(key);
+                                        }
+                                        var regex = /[0-9]/;
+                                        if (!regex.test(key)) {
+                                            theEvent.returnValue = false;
+                                            if (theEvent.preventDefault)
+                                                theEvent.preventDefault();
+                                        }
 
-            function ValidateEmail() {
+                                    }
 
-                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#email').val()))
-                {
-                    return false;
-                }
-                alert("Invalid Email Address");
-                document.getElementById("email").select();
-                return true;
+                                    function validateNumber(evt) {
+                                        var theEvent = evt || window.event;
+                                        // Handle paste
+                                        if (theEvent.type === 'paste') {
+                                            key = event.clipboardData.getData('text/plain');
+                                        } else {
+                                            // Handle key press
+                                            var key = theEvent.keyCode || theEvent.which;
+                                            key = String.fromCharCode(key);
+                                        }
+                                        var regex = /[0-9]|\./;
+                                        if (!regex.test(key)) {
+                                            theEvent.returnValue = false;
+                                            if (theEvent.preventDefault)
+                                                theEvent.preventDefault();
+                                        }
 
-            }
+                                    }
 
-            function onClickValidationContactNumber(evt) {
-                var theEvent = evt || window.event;
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault)
-                        theEvent.preventDefault();
-                }
+                                    function validateName(evt) {
+                                        var theEvent = evt || window.event;
+                                        // Handle paste
+                                        if (theEvent.type === 'paste') {
+                                            key = event.clipboardData.getData('text/plain');
+                                        } else {
+                                            // Handle key press
+                                            var key = theEvent.keyCode || theEvent.which;
+                                            key = String.fromCharCode(key);
+                                        }
+                                        var regex = /^[a-zA-Z\s]+$/;
+                                        if (!regex.test(key)) {
+                                            theEvent.returnValue = false;
+                                            if (theEvent.preventDefault)
+                                                theEvent.preventDefault();
+                                        }
 
-            }
+                                    }
 
-            function validateNumber(evt) {
-                var theEvent = evt || window.event;
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9]|\./;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault)
-                        theEvent.preventDefault();
-                }
-
-            }
-
-            function validateName(evt) {
-                var theEvent = evt || window.event;
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /^[a-zA-Z\s]+$/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault)
-                        theEvent.preventDefault();
-                }
-
-            }
-
-            function contactValidation() {
-                var contactNo = $('#contact').val();
-                if (contactNo.length === 10) {
-                    return false;
-                } else {
-                    alert("Invalid Contact Number");
-                    document.getElementById("contact").select();
-                    return true;
-                }
-            }
+                                    function contactValidation() {
+                                        var contactNo = $('#contact').val();
+                                        if (contactNo.length === 10) {
+                                            return false;
+                                        } else {
+                                            $('#alertContact').html('***Invalid Contact Number');
+                                            $('#alertContact').show();
+                                            document.getElementById("contact").select();
+                                            return true;
+                                        }
+                                    }
         </script>
     </body>
 </html>
